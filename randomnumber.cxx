@@ -22,7 +22,4 @@ int main(){
         x = dx;
         cout << dx << endl;
     }
-
-
-
 }
