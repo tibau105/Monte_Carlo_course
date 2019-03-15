@@ -16,7 +16,7 @@ void metropolis(const int N,const double cities[][2],int* route,const double T_0
 
 double probabilty(const int N,const double cities[][2],int* route,const int z1,const int z2,const double T);
 
-void plot_route(const int N,const double cities[][2],int* route,string name);
+void plot_route(const int N,const double cities[][2],int* route, const string name);
 
 //------------------------------
 int main(){
@@ -30,13 +30,11 @@ int main(){
      const double xmax = 40.; const double ymax = 40.;
      const double dt = 1.;
      
-     stringstream strm;
-     
      double cities[N][2];
      city_creator(N,cities,xmax,ymax);
      
-     for(int i=0;i<N;i++)
-        cout << cities[i][0] << "\t" << cities[i][1] << endl;
+     //for(int i=0;i<N;i++)
+       // cout << cities[i][0] << "\t" << cities[i][1] << endl;
      
      int route[N];
      
@@ -55,6 +53,7 @@ int main(){
      
      plot_route(N,cities,route,"end.txt");
      
+     return 0;
 }
 //------------------------------
 void city_creator(const int N,double cities[][2],const double xmax,const double ymax){
@@ -80,30 +79,44 @@ double traveling_dist(const int N,const double cities[][2],const int* route){
 }
 //------------------------------
 void metropolis(const int N,const double cities[][2],int* route,const double T_0,const double T_min,const double tau,const double dt){
+         
+    stringstream strm;
+    ofstream out("traveling_dist.txt");
+    
     int z1,z2,z;
-    int number = 0;
-    int number2 = 0;
+    int n_steps = 0;
+    int n_changes = 0;
     double p,x;
     double D;
     double Dmin = traveling_dist(N,cities,route);
     for(double T=T_0;T>T_min;T*=exp(-dt/tau)){
         z1 = rand()%N;
         z2 = rand()%N;
+        while(z2==z1)
+            z2 = rand()%N;
         p = probabilty(N,cities,route,z1,z2,T);
         x = (double)rand()/(double)RAND_MAX;
         if(x<p){
             z = route[z1];
             route[z1] = route[z2];
             route[z2] = z;
-            number2++;
+            n_changes++;
+            
+            strm.str("");
+            strm << "salesman//change_" << n_changes << ".txt";
+            plot_route(N,cities,route,strm.str());
+            
+            out << traveling_dist(N,cities,route) << endl;
         }
         D = traveling_dist(N,cities,route);
         if(D<Dmin) Dmin = D; 
-        number++;
+        n_steps++;
     }
-    cout << "total number of steps: " << number << endl;
-    cout << "total number of changes: " << number2 << endl;
+    cout << "total number of steps: " << n_steps << endl;
+    cout << "total number of changes: " << n_changes << endl;
     cout << "minimal traveling distance: " << Dmin << endl;
+    
+    out.close();
 }
 //------------------------------
 double probabilty(const int N,const double cities[][2],int* route,const int z1,const int z2,const double T){
@@ -123,7 +136,7 @@ double probabilty(const int N,const double cities[][2],int* route,const int z1,c
     return p;
 }
 //------------------------------
-void plot_route(const int N,const double cities[][2],int* route,string name){
+void plot_route(const int N,const double cities[][2],int* route, const string name){
     
     ofstream out(name.c_str());
     for(int i=0;i<N;i++)
