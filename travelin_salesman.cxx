@@ -9,18 +9,12 @@ using namespace std;
 
 //------------------------------
 void city_creator(const int N,double cities[][2],const double xmax,const double ymax);
-
 double traveling_dist(const int N,const double cities[][2],const int* route);
-
 void metropolis(const int N,const double cities[][2],int* route,const double T_0,const double T_min,const double tau,const double dt);
-
 double probabilty(const int N,const double cities[][2],int* route,const int z1,const int z2,const double T);
-
 void plot_route(const int N,const double cities[][2],int* route, const string name);
-
 //------------------------------
 int main(){
- 
      srand(99);
      
      const int N = 25;      //cities
@@ -34,7 +28,7 @@ int main(){
      city_creator(N,cities,xmax,ymax);
      
      //for(int i=0;i<N;i++)
-       // cout << cities[i][0] << "\t" << cities[i][1] << endl;
+       //cout << cities[i][0] << "\t" << cities[i][1] << endl;
      
      int route[N];
      
@@ -50,6 +44,7 @@ int main(){
      metropolis(N,cities,route,T_0,T_min,tau,dt);
      
      cout << "final traveling distance: " << traveling_dist(N,cities,route) << endl;
+	 cout << "--------------------------------------" << endl;
      
      plot_route(N,cities,route,"end.txt");
      
@@ -79,7 +74,6 @@ double traveling_dist(const int N,const double cities[][2],const int* route){
 }
 //------------------------------
 void metropolis(const int N,const double cities[][2],int* route,const double T_0,const double T_min,const double tau,const double dt){
-         
     stringstream strm;
     ofstream out("traveling_dist.txt");
     
@@ -114,7 +108,7 @@ void metropolis(const int N,const double cities[][2],int* route,const double T_0
     }
     cout << "total number of steps: " << n_steps << endl;
     cout << "total number of changes: " << n_changes << endl;
-    cout << "minimal traveling distance: " << Dmin << endl;
+    cout << "minimal (found) traveling distance: " << Dmin << endl;
     
     out.close();
 }
@@ -137,7 +131,6 @@ double probabilty(const int N,const double cities[][2],int* route,const int z1,c
 }
 //------------------------------
 void plot_route(const int N,const double cities[][2],int* route, const string name){
-    
     ofstream out(name.c_str());
     for(int i=0;i<N;i++)
         out << cities[route[i]][0] << "\t" << cities[route[i]][1] << endl;
