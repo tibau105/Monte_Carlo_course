@@ -27,16 +27,16 @@ int main(){
     srand(time(NULL));
 
 	//grid:
-    const int Nx = 1; //number of grid cells
+    const int Nx = 10;							//number of grid cells
     const double xmin = 0.;
     const double xmax = 10.;
 
-	const int N = 1000; //number of particles
-	const double vmax = 1.; //maximum absolute value of velocity
-   	const double absorp=0.1; //rate of absorption
+	const int N = 1000; 						//number of particles
+	const double vmax = 1.; 					//maximum absolute value of velocity
+   	const double absorp=0.1; 					//rate of absorption
 
-    const double dt = 1.; //timestep
-    const double tmax = 10.; //length of timespan
+    const double dt = 1.; 						//timestep
+    const double tmax = 10.; 					//length of timespan
     
     int grid[Nx+2]; 
 	//count the number of particles for every cell 
@@ -50,8 +50,8 @@ int main(){
 	for(int i=0;i<N;i++)
 		part[i].initialize(Nx,xmin,xmax,vmax);	
 
-	countparticles(grid,part,N,Nx,xmin,xmax); //fill array grid with numbers of particles 
-    printgrid(grid,Nx,0.); //print out array grid
+	countparticles(grid,part,N,Nx,xmin,xmax); 	//fill array grid with numbers of particles 
+    printgrid(grid,Nx,0.); 						//print out array grid
     
 	//for each timestep: move particles, count the number of particles for each cell and print out result:
     for(double t=dt;t<tmax;t+=dt){
@@ -65,12 +65,12 @@ int main(){
 }
 //------------------------------
 int gridpos(const double x, const double xmin, const double xmax, const int Nx, bool absorbed){	
-	double w = (xmax-xmin)/(double)Nx; //width of one cell
+	double w = (xmax-xmin)/(double)Nx; 			//width of one cell
 	if(absorbed==true)
-		return Nx+1; //index of number of absorped particles
+		return Nx+1; 							//index of number of absorped particles
 	else{	
 		if(x<xmin)
-		    return Nx; //index of number of particles outside of the grid
+		    return Nx; 							//index of number of particles outside of the grid
 		else
 		    return floor(x/w);
 	}
@@ -105,8 +105,8 @@ void particle::initialize(const int Nx, const double xmin, const double xmax, co
 	v = (double)rand()/(double)RAND_MAX*2.*vmax-vmax;
 
 	//initialize random position in the middle of the grid:
-	double w = (xmax-xmin)/(double)Nx; //width of one cell
-	if(Nx%2==0) //for even Nx:
+	double w = (xmax-xmin)/(double)Nx; 			//width of one cell
+	if(Nx%2==0)	//for even Nx:
 		x = (double)rand()/(double)RAND_MAX*2.*w+((double)Nx/2.-1.)*w;
 	else //for odd Nx:
 		x = (double)rand()/(double)RAND_MAX*w+((double)(Nx-1)/2.)*w;
@@ -120,8 +120,8 @@ void particle::move(const double dt, const double xwall,const double absorp){
 	//note that in this implementation particles outside the grid can still be absorbed
 	//to change this, set v=0. for particles with x<xmin
 	double z = (double)rand()/(double)RAND_MAX;
-	double l = -abs(v)/absorp*log(z); //sample l from exponential distribution
-	if(abs(dx)>l) //absorption of particle if dx > mean free path l
+	double l = -abs(v)/absorp*log(z); 			//sample l from exponential distribution
+	if(abs(dx)>l) 								//absorption of particle if dx > mean free path l
 		absorbed = true;
 
 	//consider only movement of not absorbed particles:

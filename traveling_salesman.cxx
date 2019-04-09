@@ -7,7 +7,8 @@
 
 using namespace std;
 
-class city{ //every city has a x and y position. alternative implementation: multidimensional arrays
+class city{ 
+	//every city has a x and y position. alternative implementation: multidimensional arrays
 	public:
 		void setx(double xpos){x=xpos;};
 		void sety(double ypos){y=ypos;};
@@ -27,20 +28,20 @@ void create_gnuplotscript(int n_changes);
 
 int main(){
 	 //seed for the positions of the cities
-     srand(99); //for N=25: best result found: 157.733 
+     srand(99); 										//for N=25: best result found: 157.733 
      
-     const int N = 25; //number of cities
+     const int N = 25; 									//number of cities
      const double xmax = 40.; const double ymax = 40.;
      //simulated annealing:
-	 const double T_0 = 10.; //annealing parameter
-	 //const double T_0 = 100.; //larger value improves results just slightly
+	 const double T_0 = 10.; 							//annealing parameter
+	 //const double T_0 = 100.; 						//larger value improves results just slightly
      const double T_min = 1.e-3;
-     const double tau = 1.e4; //cooling time
+     const double tau = 1.e4; 							//cooling time
 	 //const double tau = 1.e5; //larger cooling time yields better results more often but increases computing time
-     const double dt = 1.; //time steps
+     const double dt = 1.; 								//time steps
      
      city cities[N];
-     city_creator(N,cities,xmax,ymax); //create N cities with random positions in [0,xmax] x [0,ymax]
+     city_creator(N,cities,xmax,ymax); 					//create N cities with random positions in [0,xmax] x [0,ymax]
      
      int route[N];
      
@@ -95,8 +96,8 @@ void metropolis(const int N,city* cities,int* route,const double T_0,const doubl
     ofstream out("traveling_dist.txt");
     
     int i1,i2,i;
-    int n_steps = 0; //number of steps
-    int n_changes = 0; //number of changes of the route
+    int n_steps = 0; 								//number of steps
+    int n_changes = 0; 								//number of changes of the route
     double p,x;
     double D;
     double Dmin = traveling_dist(N,cities,route);
@@ -145,13 +146,13 @@ double probabilty(const int N,city* cities,int* route,const int i1,const int i2,
     double D0,D1,dD;
     double p = 1.;
 
-    D0 = traveling_dist(N,cities,route); //initial traveling distance 
+    D0 = traveling_dist(N,cities,route); 				//initial traveling distance 
 
     //switch positions of cities in the route
 	int i = route[i1];
     route[i1] = route[i2];
     route[i2] = i;
-    D1 = traveling_dist(N,cities,route); //traveling distance after switching
+    D1 = traveling_dist(N,cities,route); 				//traveling distance after switching
     dD = D1-D0;
 
 	//if switching increases traveling distance, set probabilty to p to exp(...)
